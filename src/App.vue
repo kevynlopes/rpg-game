@@ -1,26 +1,57 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" @keydown="moveCharacter">
+    <Map :map="map" :characterPosition="characterPosition" />
+    <Character
+      :name="characterName"
+      :hp="characterHp"
+      :position="characterPosition"
+      @move="moveCharacter"
+    />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Character from "./components/Character.vue";
+import Map from "./components/Map.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    Character,
+    Map,
+  },
+  data() {
+    return {
+      characterName: "Hero",
+      characterHp: 100,
+      characterPosition: { row: 0, col: 0 },
+      map: [
+        ["*", "*", "*", "*"],
+        ["*", ".", ".", "*"],
+        ["*", ".", ".", "*"],
+        ["*", "*", "*", "*"],
+      ],
+    };
+  },
+  methods: {
+    moveCharacter(direction) {
+      const newRow = this.characterPosition.row + direction.row;
+      const newCol = this.characterPosition.col + direction.col;
+
+      if (
+        newRow >= 0 &&
+        newRow < this.map.length &&
+        newCol >= 0 &&
+        newCol < this.map[0].length &&
+        this.map[newRow][newCol] !== "*"
+      ) {
+        this.characterPosition.row = newRow;
+        this.characterPosition.col = newCol;
+      }
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/* styles here */
 </style>
